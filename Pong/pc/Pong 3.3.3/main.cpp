@@ -77,6 +77,14 @@ struct Cursor {
     Texture non_cliccato;
 };
 
+float valore_scalato(const Game &game, float valore, bool x ) {
+    if (x) {
+        return valore * game.screenWidth / 1920;
+    } else {
+        return valore * game.screenHeight / 1080;
+    }
+}
+
 void sposta_tra_stati (const Triangle &triangolo, Game &game, int stato_a_cui_andare, bool caricamento) {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointTriangle(GetMousePosition(), triangolo.punto_1, triangolo.punto_2, triangolo.punto_3)) {
         if (caricamento) {
@@ -362,8 +370,8 @@ void partita_classica_stato_3 (Game &game, std::vector<Player> &giocatori, Ball 
             giocatori.at(0).punteggio = 0;
             giocatori.at(1).punteggio = 0;
             game.tempo_partita = 0;
-            giocatori.at(0).barretta = {50, screenHeight / 2 - game.h_iniz / 2, giocatori.at(0).barretta.width, game.h_iniz};
-            giocatori.at(1).barretta = {(float)(screenWidth - 50), screenHeight / 2 - game.h_iniz / 2, giocatori.at(0).barretta.width, game.h_iniz};
+            giocatori.at(0).barretta = {valore_scalato(game, 50, true), screenHeight / 2 - game.h_iniz / 2, giocatori.at(0).barretta.width, game.h_iniz};
+            giocatori.at(1).barretta = {(float)(screenWidth - valore_scalato(game, 50, true)), screenHeight / 2 - game.h_iniz / 2, giocatori.at(0).barretta.width, game.h_iniz};
             if (pallina.x != screenWidth / 2) {
                 pallina.x = screenWidth / 2;
                 pallina.y = (float)(GetRandomValue(pallina.raggio, screenHeight - pallina.raggio));
@@ -415,10 +423,10 @@ void partita_classica_stato_3 (Game &game, std::vector<Player> &giocatori, Ball 
             game.tempo_partita++;
             if (game.tempo_partita > 1500 && game.gioco != 2 && game.gioco != 3) {
                 inc_v(velocita);
-                game.incremento += 0.005;
-                if (game.tempo_partita > 2000 && giocatori.at(0).barretta.height > 30) {
-                    giocatori.at(0).barretta.height -= 0.05;;
-                    giocatori.at(1).barretta.height -= 0.05;;
+                game.incremento += valore_scalato(game, 0.005, true);
+                if (game.tempo_partita > 2000 && giocatori.at(0).barretta.height > valore_scalato(game, 30, false)) {
+                    giocatori.at(0).barretta.height -= valore_scalato(game, 0.05, true);
+                    giocatori.at(1).barretta.height -= valore_scalato(game, 0.05, true);
 
                 }
             }
@@ -483,23 +491,23 @@ void dis_partita_libera_stato_4 (Game &game, const Ball &pallina,  std::vector<P
 
 void scelta_difficolta(Ball &pallina, Speeds &velocita, Game &game, int difficolta) {
     if (difficolta == 0) {
-        velocita.v0 = 9;
-        velocita.v_barretta_1 = 7;
-        velocita.v_barretta_2 = 7;
-        game.h_iniz = 200;
-        pallina.raggio = 15;
+        velocita.v0 = valore_scalato(game, 9, true);
+        velocita.v_barretta_1 = valore_scalato(game, 7, true);
+        velocita.v_barretta_2 = valore_scalato(game, 7, true);
+        game.h_iniz = valore_scalato(game, 200, false);
+        pallina.raggio = valore_scalato(game, 15, false);
     } else if (difficolta == 1) {
-        velocita.v0 = 11;
-        velocita.v_barretta_1 = 9;
-        velocita.v_barretta_2 = 9;
-        game.h_iniz = 180;
-        pallina.raggio = 13;
+        velocita.v0 = valore_scalato(game, 11, true);
+        velocita.v_barretta_1 = valore_scalato(game, 9, true);
+        velocita.v_barretta_2 = valore_scalato(game, 9, true);
+        game.h_iniz = valore_scalato(game, 180, false);
+        pallina.raggio = valore_scalato(game, 13, false);
     } else {
-        velocita.v0 = 15;
-        velocita.v_barretta_1 = 11;
-        velocita.v_barretta_2 = 11;
-        game.h_iniz = 160;
-        pallina.raggio = 10;
+        velocita.v0 = valore_scalato(game, 15, true);
+        velocita.v_barretta_1 = valore_scalato(game, 11, true);
+        velocita.v_barretta_2 = valore_scalato(game, 11, true);
+        game.h_iniz = valore_scalato(game, 160, false);
+        pallina.raggio = valore_scalato(game, 10, false);
     }
 }
 
@@ -889,6 +897,8 @@ void salva_colori (const Colors &colori) {
     out.close();
 }
 
+
+
 int main(void)
 {
     // Initialization
@@ -896,20 +906,22 @@ int main(void)
     InitWindow(0, 0, "Pong");
 
     SetTargetFPS(60);
-    float h_iniz = 200, l = 15;
 
 
 
-    Game game = {GetScreenWidth(), GetScreenHeight(),1, 0, 0, h_iniz, 0,0, 0, 0, false, 0};
+
+    Game game = {GetScreenWidth(), GetScreenHeight(),1, 0, 0, valore_scalato(game, 200, false)
+                 , 0,0, 0, 0, false, 0};
+    float l = valore_scalato(game, 15, true);
 
     Ball pallina= {15, (float)(game.screenWidth / 2.0),  (float)(GetRandomValue(pallina.raggio, game.screenHeight - pallina.raggio)), true};
 
     std::vector<Player> giocatori = {
-            {0, {50, (float)(game.screenWidth - 50), l, h_iniz}},
-            {0, {game.screenHeight / 2 - h_iniz / 2, game.screenHeight / 2 - h_iniz / 2, l, h_iniz}}
+            {0, {valore_scalato(game, 50, true), game.screenHeight / 2 - game.h_iniz / 2, l, game.h_iniz}},
+            {0, {(float)(game.screenWidth - valore_scalato(game, 50, true)), game.screenHeight / 2 - game.h_iniz / 2, l, game.h_iniz}}
     };
 
-    Rectangle caricamento = {0,  (float)(game.screenHeight - game.screenHeight/20.0), 0 , (float)(game.screenHeight/20.0)};
+    Rectangle caricamento = {0,  (float)(game.screenHeight - game.screenHeight/20), 0 , (float)(game.screenHeight/20)};
 
     Speeds velocita = {9,0,0, 7, 7};
 
@@ -917,7 +929,7 @@ int main(void)
             {{0, 0, 0},
              {colori.rgb_1.canali_colore.at(0), colori.rgb_1.canali_colore.at(1), colori.rgb_1.canali_colore.at(2), 255},
              true,
-             },
+            },
             {{250, 250, 250},
              {colori.rgb_2.canali_colore.at(0), colori.rgb_2.canali_colore.at(1), colori.rgb_2.canali_colore.at(2), 255},
              false,
@@ -937,9 +949,9 @@ int main(void)
     String stringhe {
             {
                     {"PONG", "Modalita'", "Impostazioni"},
-                    {"Caricamento.", "Caricamento..", "Caricamento..."},
-                    {"Modalita'" , "1)     Pong classico", "2)    Pong libero","3)    Pong classico medio","4)    Pong libero medio","5)    Pong classico difficile","6)    Pong libero difficile", "Informazioni"},
-                    {"Premi spazio per iniziare", "Premere spazio per continuare", "Ricomincia","Esci"," ha fatto punto"," ha vinto!", "Pausa", "Il gioco è in pausa"},
+                                   {"Caricamento.", "Caricamento..", "Caricamento..."},
+                                                        {"Modalita'" , "1)     Pong classico", "2)    Pong libero","3)    Pong classico medio","4)    Pong libero medio","5)    Pong classico difficile","6)    Pong libero difficile", "Informazioni"},
+                                                                            {"Premi spazio per iniziare", "Premere spazio per continuare", "Ricomincia","Esci"," ha fatto punto"," ha vinto!", "Pausa", "Il gioco è in pausa"},
                     {""},
                     {""},
                     {""},
@@ -956,7 +968,7 @@ int main(void)
                     {""},
                     {""},
                     {"Modalita'", "In pong classico le barrette possono","solo salire e scendere", "In pong libero le barrette si possono","muovere in ogni direzione", "Difficolta'",
-                     "Con l'aumentare della difficoltà la velocita' aumenta,", "la dimensione delle barrette diminuisce", "e il raggio della pallina diminuisce"},
+                            "Con l'aumentare della difficoltà la velocita' aumenta,", "la dimensione delle barrette diminuisce", "e il raggio della pallina diminuisce"},
                     {"Impostazioni", "1)     Modifica i nomi","2)    Colori", "4)    Associazione tasti","4)    Informazioni"},
                     {"Colori","1)    Colore della pallina","2)   Colore della barretta","3)   Colore delle scritte","4)   Colore dello sfondo"},
                     {"Seleziona un colore"},
@@ -965,33 +977,34 @@ int main(void)
                     {"Nomi", "Inserisci il nome del giocatore 1", "Inserisci il nome del giocatore 2", "Giocatore 1", "Giocatore 2"},
                     {"Crediti", "Realizzato da Stellino Marco", "Versione numero 3.3"},
                     {"Generali","P      attivare o disattivare la pausa", "F11    per mettere a schermo intero", "", "", "Giocatore 1", "W      per andare verso l'alto", "S      per andare verso il basso", "A      per andare verso sinistra", "D      per verso destra", "Giocatore 2", "Freccia su            per andare verso l'alto",
-                     "Freccia giu'          per andare verso il basso", "Freccia sinstra     per andare verso sinistra", "Freccia destra      per verso destra"}
+                            "Freccia giu'          per andare verso il basso", "Freccia sinstra     per andare verso sinistra", "Freccia destra      per verso destra"}
             },
-            { 150, 100, 60, 45}
+            { valore_scalato(game, 150, false), valore_scalato(game, 100, false), valore_scalato(game, 60, false), valore_scalato(game, 45, false)}
     };
 
     carica_nomi(stringhe);
 
     Vector2 punto = {game.screenWidth*0.95, game.screenHeight*0.9};
+
     Triangle triangolo_avanti = {
-            {punto.x + 50, punto.y-40},
-            {punto.x + 50, punto.y + 40},
-            {punto.x + 90, punto.y}
+            {punto.x + valore_scalato(game, 50, true), punto.y-valore_scalato(game, 40, true)},
+            {punto.x + valore_scalato(game, 50, true), punto.y + valore_scalato(game, 40, true)},
+            {punto.x + valore_scalato(game, 90, true), punto.y}
 
     };
     Triangle triangolo_indietro = {
-            {punto.x + 40, punto.y-40},
+            {punto.x + valore_scalato(game, 40, true), punto.y-valore_scalato(game, 40, true)},
             {punto},
-            {punto.x + 40, punto.y + 40}
+            {punto.x + valore_scalato(game, 40, true), punto.y + valore_scalato(game, 40, true)}
 
     };
 
     Cursor cursore = {
-            LoadTexture("../assets/cliccato.png"),
-            LoadTexture("../assets/non_cliccato.png")
+            LoadTexture("assets/cliccato.png"),
+            LoadTexture("assets/non_cliccato.png")
     };
 
-    SetWindowIcon(LoadImage("../assets/PONG.png"));
+    SetWindowIcon(LoadImage("assets/PONG.png"));
 
     ToggleFullscreen();
     while (!WindowShouldClose()) {
