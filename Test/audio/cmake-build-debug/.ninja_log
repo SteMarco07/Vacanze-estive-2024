@@ -1,0 +1,11 @@
+# ninja log v5
+1	155	7408337367873388	build.ninja	2efd10f35edbc344
+0	12	0	clean	ef8842113fecf3f6
+0	139	6642878542218129	CMakeFiles/raylib_template_portable_windows.dir/main.cpp.obj	a87a95db0e280e5f
+140	361	6642878544418305	raylib_template_portable_windows.exe	47d66955313cfa49
+3	62	7408338515337104	CMakeFiles/raylib_template_portable_windows.dir/main.cpp.obj	cafc81e74e78fb41
+63	245	7408338517121744	raylib_template_portable_windows.exe	f195d0e99d3c86a3
+4	57	7408339429866239	CMakeFiles/raylib_template_portable_windows.dir/main.cpp.obj	cafc81e74e78fb41
+58	207	7408339431326267	raylib_template_portable_windows.exe	f195d0e99d3c86a3
+34	897	7408447395029008	CMakeFiles/raylib_template_portable_windows.dir/main.cpp.obj	cafc81e74e78fb41
+900	1121	7408447397258771	raylib_template_portable_windows.exe	f195d0e99d3c86a3
