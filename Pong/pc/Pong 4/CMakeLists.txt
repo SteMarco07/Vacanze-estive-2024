@@ -8,3 +8,5 @@ add_executable(Pong main.cpp)
 find_library(RAYLIBRARY raylib lib)
 
 target_link_libraries(Pong LINK_PUBLIC ${RAYLIBRARY} winmm)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static")
