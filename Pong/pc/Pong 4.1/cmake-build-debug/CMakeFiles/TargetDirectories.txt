@@ -1,3 +1,0 @@
-C:/Users/Utente/Desktop/Marco informatica/Informatica/Pong 4.1/cmake-build-debug/CMakeFiles/Pong.dir
-C:/Users/Utente/Desktop/Marco informatica/Informatica/Pong 4.1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Utente/Desktop/Marco informatica/Informatica/Pong 4.1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
